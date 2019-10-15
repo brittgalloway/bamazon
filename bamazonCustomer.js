@@ -25,19 +25,37 @@ function listProducts() {
           " Item Price: " +
           response[index].price +
           " Qty: " +
-          response[index].stock_quantity +
-          `\n=========`
+          response[index].stock_quantity
       );
     }
-
     console.log(productArray);
-    // console.log(err);
-    // console.log(response);
   });
-  // response.forEach(function([index]) {
-  //   productArray.push(response[i].item_id);
-  // });
 }
+function chooseToBuy() {
+  listProducts();
+
+  inquirer
+    .prompt({
+      name: "itemChoice",
+      type: "number",
+      message:
+        "Please type the Item Number of the product you want to purchase."
+    })
+    .then(
+      inquirer
+        .prompt({
+          name: "itemStock",
+          type: "number",
+          message: "How many do you want to purchase?"
+        })
+        .then(function(answer) {
+          console.log(response);
+        })
+    );
+}
+chooseToBuy();
+// response.forEach(function([index]) {
+//   productArray.push(response[i].item_id);
+// });
 
 // function updateStock();
-listProducts();
