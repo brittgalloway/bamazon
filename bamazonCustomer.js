@@ -69,6 +69,7 @@ function chooseToBuy(response) {
                 response[index].stock_quantity > 0 &&
                 response[index].stock_quantity >= answer.itemStock
               ) {
+                const price = response[index].price;
                 const responseStock = response[index].stock_quantity;
                 const answerStock = answer.itemStock;
 
@@ -84,8 +85,7 @@ function chooseToBuy(response) {
                     ";",
                   (err, response) => {
                     listProducts();
-                    console.log("You bought it!");
-                    console.log(updatedStock);
+                    console.log("Total: " + answerStock * price);
                   }
                 );
               } else {
