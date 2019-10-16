@@ -45,8 +45,17 @@ function chooseToBuy(response) {
         let match = false;
         if (response[index].item_id == answer.itemChoice) {
           match = true;
-          const product = answer.itemChoice;
-          console.log(response[index].product_name);
+
+          console.log(
+            "You chose: " +
+              response[index].product_name +
+              "\n" +
+              "Price: " +
+              response[index].price +
+              "\n" +
+              "Stock: " +
+              response[index].stock_quantity
+          );
 
           inquirer
             .prompt({
