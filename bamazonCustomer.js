@@ -37,13 +37,16 @@ function chooseToBuy(response) {
       type: "number",
       message:
         "Please type the Item Number of the product you want to purchase."
+      // if (NaN) {
+      //   console.log("Please choose an item number");
+      //   chooseToBuy(response);
+      // }
     })
     .then(function(answer) {
       for (let index = 0; index < response.length; index++) {
         let match = false;
         if (response[index].item_id == answer.itemChoice) {
           match = true;
-
           console.log(
             "You chose: " +
               response[index].product_name +
@@ -61,21 +64,33 @@ function chooseToBuy(response) {
               type: "number",
               message: "How many do you want to purchase?"
             })
-            .then(function(answer) {
+            .then(answer => {
               if (
                 response[index].stock_quantity > 0 &&
                 response[index].stock_quantity >= answer.itemStock
-              )
+              ) {
+                const responseStock = response[index].stock_quantity;
+                const answerStock = answer.itemStock;
+
+                const updatedStock = responseStock - answerStock;
+                const id = response[index].item_id;
+
+                console.log("item_id " + response[index].item_id);
                 connection.query(
-                  "UPDATE products SET stock_quantity='" +
-                    (response[index].stock_quantity - answer.itemStock) +
-                    "' WHERE " +
-                    response[index].product_name +
-                    "'",
-                  function(err, response2) {
-                    console.log(response2.stock_quantity);
+                  "UPDATE products SET stock_quantity ='" +
+                    updatedStock +
+                    "' WHERE item_id=" +
+                    id +
+                    ";",
+                  (err, response) => {
+                    listProducts();
+                    console.log("You bought it!");
+                    console.log(updatedStock);
                   }
                 );
+              } else {
+                console.log("We can't sell that many");
+              }
             });
         }
       }
