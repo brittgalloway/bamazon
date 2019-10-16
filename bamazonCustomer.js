@@ -47,29 +47,31 @@ function chooseToBuy(response) {
           match = true;
           const product = answer.itemChoice;
           console.log(response[index].product_name);
+
+          inquirer
+            .prompt({
+              name: "itemStock",
+              type: "number",
+              message: "How many do you want to purchase?"
+            })
+            .then(function(answer) {
+              if (
+                response[index].stock_quantity > 0 &&
+                response[index].stock_quantity >= answer.itemStock
+              )
+                connection.query(
+                  "UPDATE products SET stock_quantity='" +
+                    (response[index].stock_quantity - answer.itemStock) +
+                    "' WHERE " +
+                    response[index].product_name +
+                    "'",
+                  function(err, response) {
+                    console.log(response[index].stock_quantity);
+                  }
+                );
+            });
         }
       }
-      inquirer
-        .prompt({
-          name: "itemStock",
-          type: "number",
-          message: "How many do you want to purchase?"
-        })
-        .then(function(answer) {
-          if (
-            response[index].stock_quantity > 0 &&
-            response[index].stock_quantity >= answer.itemStock
-          )
-            connection.query(
-              "UPDATE products SET stock_quantity='" +
-                (response[index].stock_quantity - answer.itemStock) +
-                "' WHERE " +
-                response[index].product_name +
-                "'",
-              function(err, response) {}
-            );
-          console.log(response[index].stock_quantity);
-        });
     });
 }
 
