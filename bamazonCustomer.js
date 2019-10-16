@@ -15,20 +15,19 @@ const connection = mysql.createConnection({
 // });
 function listProducts() {
   connection.query("SELECT * FROM products", function(err, response) {
-    const productArray = [];
+    // const productArray = [];
     for (let index = 0; index < response.length; index++) {
-      productArray.push(
+      console.log(
         "Item number: " +
           response[index].item_id +
-          " Item Name: " +
+          " | Item Name: " +
           response[index].product_name +
-          " Item Price: " +
+          " | Item Price: " +
           response[index].price +
-          " Qty: " +
+          " | Qty: " +
           response[index].stock_quantity
       );
     }
-    console.log(productArray);
   });
 }
 function chooseToBuy() {
@@ -41,7 +40,14 @@ function chooseToBuy() {
       message:
         "Please type the Item Number of the product you want to purchase."
     })
-    .then(
+    .then(function(answer) {
+      let match = false;
+      for (let index = 0; index < response.length; index++) {
+        if (response[index].item_id == answer.itemChoice) {
+          match = true;
+          const product = answer.itemChoice;
+        }
+      }
       inquirer
         .prompt({
           name: "itemStock",
@@ -49,9 +55,11 @@ function chooseToBuy() {
           message: "How many do you want to purchase?"
         })
         .then(function(answer) {
-          console.log(response);
-        })
-    );
+         
+          connection.query("SELECT * FROM products", function(err, response) {
+
+        });
+    });
 }
 chooseToBuy();
 // response.forEach(function([index]) {
