@@ -10,12 +10,9 @@ const connection = mysql.createConnection({
   password: process.env.PASSWORD,
   database: process.env.DATABASE
 });
-// connection.connect(function(err) {
-//   console.log("Connected as id: " + connection.threadId);
-// });
+
 function listProducts() {
   connection.query("SELECT * FROM products", function(err, response) {
-    // const productArray = [];
     for (let index = 0; index < response.length; index++) {
       console.log(
         "Item number: " +
@@ -25,7 +22,8 @@ function listProducts() {
           " | Item Price: " +
           response[index].price +
           " | Qty: " +
-          response[index].stock_quantity
+          response[index].stock_quantity +
+          "\n========================================"
       );
     }
     chooseToBuy(response);
@@ -74,8 +72,8 @@ function chooseToBuy(response) {
                     "' WHERE " +
                     response[index].product_name +
                     "'",
-                  function(err, response) {
-                    console.log(response[index].stock_quantity);
+                  function(err, response2) {
+                    console.log(response2.stock_quantity);
                   }
                 );
             });
@@ -83,9 +81,3 @@ function chooseToBuy(response) {
       }
     });
 }
-
-// response.forEach(function([index]) {
-//   productArray.push(response[i].item_id);
-// });
-
-// function updateStock();
