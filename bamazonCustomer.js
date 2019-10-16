@@ -28,11 +28,11 @@ function listProducts() {
           response[index].stock_quantity
       );
     }
+    chooseToBuy(response);
   });
 }
-function chooseToBuy() {
-  listProducts();
-
+listProducts();
+function chooseToBuy(response) {
   inquirer
     .prompt({
       name: "itemChoice",
@@ -41,11 +41,12 @@ function chooseToBuy() {
         "Please type the Item Number of the product you want to purchase."
     })
     .then(function(answer) {
-      let match = false;
       for (let index = 0; index < response.length; index++) {
+        let match = false;
         if (response[index].item_id == answer.itemChoice) {
           match = true;
           const product = answer.itemChoice;
+          console.log(response[index].product_name);
         }
       }
       inquirer
@@ -55,13 +56,23 @@ function chooseToBuy() {
           message: "How many do you want to purchase?"
         })
         .then(function(answer) {
-         
-          connection.query("SELECT * FROM products", function(err, response) {
-
+          if (
+            response[index].stock_quantity > 0 &&
+            response[index].stock_quantity >= answer.itemStock
+          )
+            connection.query(
+              "UPDATE products SET stock_quantity='" +
+                (response[index].stock_quantity - answer.itemStock) +
+                "' WHERE " +
+                response[index].product_name +
+                "'",
+              function(err, response) {}
+            );
+          console.log(response[index].stock_quantity);
         });
     });
 }
-chooseToBuy();
+
 // response.forEach(function([index]) {
 //   productArray.push(response[i].item_id);
 // });
