@@ -37,8 +37,10 @@ function chooseToBuy(response) {
       type: "number",
       message:
         "Please type the Item Number of the product you want to purchase."
-      // if (NaN) {
-      //   console.log("Please choose an item number");
+      // validate: () => {
+      //   if (NaN) {
+      //     console.log("Please choose an item number");
+      //   }
       //   chooseToBuy(response);
       // }
     })
@@ -72,24 +74,63 @@ function chooseToBuy(response) {
                 const price = response[index].price;
                 const responseStock = response[index].stock_quantity;
                 const answerStock = answer.itemStock;
-
+                const item = response[index].product_name;
                 const updatedStock = responseStock - answerStock;
                 const id = response[index].item_id;
 
-                console.log("item_id " + response[index].item_id);
-                connection.query(
-                  "UPDATE products SET stock_quantity ='" +
-                    updatedStock +
-                    "' WHERE item_id=" +
-                    id +
-                    ";",
-                  (err, response) => {
-                    listProducts();
-                    console.log("Total: " + answerStock * price);
-                  }
-                );
+                console.log("Item: " + item + " | Price: " + price);
+                console.log("Quantity: " + answerStock);
+                console.log("Total: " + answerStock * price);
+                inquirer
+                  .prompt({
+                    name: "confirm",
+                    type: "confirm",
+                    message: "Is this correct?",
+                    default: true
+                  })
+                  .then(function(answer) {
+                    if ((answer = false)) {
+                      console.log("Sorry, please select again.");
+                      listProducts();
+                    } else {
+                      console.log(
+                        "You bought " + answerStock + " " + item + "."
+                      );
+                      console.log("There are " + responseStock + " remaining.");
+                      connection.query(
+                        "UPDATE products SET stock_quantity ='" +
+                          updatedStock +
+                          "' WHERE item_id=" +
+                          id +
+                          ";",
+                        (err, response) => {
+                          // listProducts();
+                        }
+                      );
+                      inquirer
+                        .prompt({
+                          name: "continueOrNo",
+                          type: "confirm",
+                          message: "Do you need anything else?",
+                          default: false
+                        })
+                        .then(function(answer) {
+                          //not working
+                          let answer = false;
+                          if ((answer = true)) {
+                            chooseToBuy(response);
+                          }
+                          //not working
+                          if ((answer = false)) {
+                            console.log("Thanks for shopping with us!");
+                            answer.continueOrNo.end();
+                          }
+                        });
+                    }
+                  });
               } else {
                 console.log("We can't sell that many");
+                chooseToBuy(response);
               }
             });
         }
