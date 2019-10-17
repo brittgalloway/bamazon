@@ -37,17 +37,11 @@ function chooseToBuy(response) {
       type: "number",
       message:
         "Please type the Item Number of the product you want to purchase."
-      // validate: () => {
-      //   if (NaN) {
-      //     console.log("Please choose an item number");
-      //   }
-      //   chooseToBuy(response);
-      // }
     })
     .then(function(answer) {
       for (let index = 0; index < response.length; index++) {
         let match = false;
-        if (response[index].item_id == answer.itemChoice) {
+        if (response[index].item_id === answer.itemChoice) {
           match = true;
           console.log(
             "You chose: " +
