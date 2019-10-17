@@ -103,9 +103,7 @@ function chooseToBuy(response) {
                           "' WHERE item_id=" +
                           id +
                           ";",
-                        (err, response) => {
-                          // listProducts();
-                        }
+                        (err, response) => {}
                       );
                       inquirer
                         .prompt({
@@ -114,16 +112,14 @@ function chooseToBuy(response) {
                           message: "Do you need anything else?",
                           default: false
                         })
-                        .then(function(answer) {
-                          //not working
-                          let answer = false;
-                          if ((answer = true)) {
+                        .then(function(answer3) {
+                          if (answer3.continueOrNo == true) {
                             chooseToBuy(response);
                           }
-                          //not working
-                          if ((answer = false)) {
+
+                          if (answer3.continueOrNo == false) {
                             console.log("Thanks for shopping with us!");
-                            answer.continueOrNo.end();
+                            process.exit(0);
                           }
                         });
                     }
