@@ -132,11 +132,9 @@ function chooseToBuy(response) {
 
       if (itemArr.includes(answer.itemChoice) === false) {
         match = false;
-        console.log(
-          "ERROR! \nItem Number not found. Please come back and try again."
-        );
+        console.log("ERROR! \nItem Number not found. Please try again.");
 
-        process.exit(0);
+        chooseToBuy(response);
       }
     });
 }
