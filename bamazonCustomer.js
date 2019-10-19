@@ -39,10 +39,10 @@ function chooseToBuy(response) {
         "Please type the Item Number of the product you want to purchase. (0 to cancel)"
     })
     .then(function(answer) {
-      if (answer.itemChoice == 0) {
-        process.exit(0);
-      }
       for (let index = 0; index < response.length; index++) {
+        if (answer.itemChoice == 0) {
+          process.exit(0);
+        }
         let match = false;
         if (response[index].item_id === answer.itemChoice) {
           match = true;
@@ -126,25 +126,15 @@ function chooseToBuy(response) {
               }
             });
         }
-        if (answer.itemChoice == NaN) {
-          match = false;
-          console.log("Sorry, please select again.");
-          // inquirer
-          //   .prompt({
-          //     name: "wrongKey",
-          //     type: "confirm",
-          //     message: "Do you want to start again?",
-          //     default: true
-          //   })
-          //   .then(function(answerWK) {
-          //     if (answerWK == true) {
-          //       listProducts();
-          //     } else {
-          //       console.log("Come again!");
-          //       process.exit(0);
-          //     }
-          //   });
-        }
       }
+      //NOT WORKING AS EXPECTED
+      // if (response[index].item_id !== answer.itemChoice) {
+      //   match = false;
+      //   console.log(
+      //     "ERROR! \nItem Number not found. Please come back and try again."
+      //   );
+
+      //   process.exit(0);
+      // }
     });
 }
