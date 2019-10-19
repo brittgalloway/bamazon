@@ -93,9 +93,9 @@ function chooseToBuy(response) {
                     default: true
                   })
                   .then(function(answer) {
-                    if (answer == false) {
-                      console.log("Sorry, please select again.");
-                      listProducts();
+                    if (answer.confirm == false) {
+                      console.log("Our Mistake, please select again.");
+                      chooseToBuy(response);
                     } else {
                       console.log(
                         "You bought " + answerStock + " " + item + "."
