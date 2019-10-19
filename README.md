@@ -1,4 +1,4 @@
-# bamazon
+# Bamazon
 
 A CLI to browse and shop online for items.
 
