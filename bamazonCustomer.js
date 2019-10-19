@@ -11,6 +11,7 @@ const connection = mysql.createConnection({
   database: process.env.DATABASE
 });
 
+const itemArr = [];
 function listProducts() {
   connection.query("SELECT * FROM products", function(err, response) {
     for (let index = 0; index < response.length; index++) {
@@ -25,6 +26,7 @@ function listProducts() {
           response[index].stock_quantity +
           "\n========================================"
       );
+      itemArr.push(response[index].item_id);
     }
     chooseToBuy(response);
   });
@@ -127,14 +129,14 @@ function chooseToBuy(response) {
             });
         }
       }
-      //NOT WORKING AS EXPECTED
-      // if (response[index].item_id !== answer.itemChoice) {
-      //   match = false;
-      //   console.log(
-      //     "ERROR! \nItem Number not found. Please come back and try again."
-      //   );
 
-      //   process.exit(0);
-      // }
+      if (itemArr.includes(answer.itemChoice) === false) {
+        match = false;
+        console.log(
+          "ERROR! \nItem Number not found. Please come back and try again."
+        );
+
+        process.exit(0);
+      }
     });
 }
