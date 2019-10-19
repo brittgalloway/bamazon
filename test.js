@@ -36,15 +36,18 @@ function chooseToBuy(response) {
       name: "itemChoice",
       type: "number",
       message:
-        "Please type the Item Number of the product you want to purchase. (0 to cancel)"
+        "Please type the Item Number of the product you want to purchase."
+      // validate: () => {
+      //   if (NaN) {
+      //     console.log("Please choose an item number");
+      //   }
+      //   chooseToBuy(response);
+      // }
     })
     .then(function(answer) {
-      if (answer.itemChoice == 0) {
-        process.exit(0);
-      }
       for (let index = 0; index < response.length; index++) {
         let match = false;
-        if (response[index].item_id === answer.itemChoice) {
+        if (response[index].item_id == answer.itemChoice) {
           match = true;
           console.log(
             "You chose: " +
@@ -86,7 +89,7 @@ function chooseToBuy(response) {
                     default: true
                   })
                   .then(function(answer) {
-                    if ((answer = false)) {
+                    if (answer === false) {
                       console.log("Sorry, please select again.");
                       listProducts();
                     } else {
@@ -100,7 +103,9 @@ function chooseToBuy(response) {
                           "' WHERE item_id=" +
                           id +
                           ";",
-                        (err, response) => {}
+                        (err, response) => {
+                          // listProducts();
+                        }
                       );
                       inquirer
                         .prompt({
@@ -109,12 +114,14 @@ function chooseToBuy(response) {
                           message: "Do you need anything else?",
                           default: false
                         })
-                        .then(function(answer3) {
-                          if (answer3.continueOrNo == true) {
+                        .then(function(answer) {
+                          //not working
+                          let answer = false;
+                          if (answer === true) {
                             chooseToBuy(response);
                           }
-
-                          if (answer3.continueOrNo == false) {
+                          //not working
+                          if (answer === false) {
                             console.log("Thanks for shopping with us!");
                             process.exit(0);
                           }
