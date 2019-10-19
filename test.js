@@ -81,6 +81,14 @@ function chooseToBuy(response) {
                 console.log("Item: " + item + " | Price: " + price);
                 console.log("Quantity: " + answerStock);
                 console.log("Total: " + answerStock * price);
+                connection.query(
+                  "UPDATE products SET stock_quantity ='" +
+                    updatedStock +
+                    "' WHERE item_id=" +
+                    id +
+                    ";",
+                  (err, response) => {}
+                );
                 inquirer
                   .prompt({
                     name: "confirm",
@@ -89,24 +97,14 @@ function chooseToBuy(response) {
                     default: true
                   })
                   .then(function(answer) {
-                    if (answer === false) {
+                    if (answer == false) {
                       console.log("Sorry, please select again.");
                       listProducts();
                     } else {
                       console.log(
                         "You bought " + answerStock + " " + item + "."
                       );
-                      console.log("There are " + responseStock + " remaining.");
-                      connection.query(
-                        "UPDATE products SET stock_quantity ='" +
-                          updatedStock +
-                          "' WHERE item_id=" +
-                          id +
-                          ";",
-                        (err, response) => {
-                          // listProducts();
-                        }
-                      );
+                      console.log("There are " + updatedStock + " remaining.");
                       inquirer
                         .prompt({
                           name: "continueOrNo",
@@ -117,13 +115,13 @@ function chooseToBuy(response) {
                         .then(function(answer) {
                           //not working
                           let answer = false;
-                          if (answer === true) {
+                          if ((answer = true)) {
                             chooseToBuy(response);
                           }
                           //not working
-                          if (answer === false) {
+                          if ((answer = false)) {
                             console.log("Thanks for shopping with us!");
-                            process.exit(0);
+                            answer.continueOrNo.end();
                           }
                         });
                     }

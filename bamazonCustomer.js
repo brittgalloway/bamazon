@@ -74,10 +74,17 @@ function chooseToBuy(response) {
                 const item = response[index].product_name;
                 const updatedStock = responseStock - answerStock;
                 const id = response[index].item_id;
-
                 console.log("Item: " + item + " | Price: " + price);
                 console.log("Quantity: " + answerStock);
                 console.log("Total: " + answerStock * price);
+                connection.query(
+                  "UPDATE products SET stock_quantity ='" +
+                    updatedStock +
+                    "' WHERE item_id=" +
+                    id +
+                    ";",
+                  (err, response) => {}
+                );
                 inquirer
                   .prompt({
                     name: "confirm",
@@ -86,22 +93,14 @@ function chooseToBuy(response) {
                     default: true
                   })
                   .then(function(answer) {
-                    if ((answer = false)) {
+                    if (answer == false) {
                       console.log("Sorry, please select again.");
                       listProducts();
                     } else {
                       console.log(
                         "You bought " + answerStock + " " + item + "."
                       );
-                      console.log("There are " + responseStock + " remaining.");
-                      connection.query(
-                        "UPDATE products SET stock_quantity ='" +
-                          updatedStock +
-                          "' WHERE item_id=" +
-                          id +
-                          ";",
-                        (err, response) => {}
-                      );
+                      console.log("There are " + updatedStock + " remaining.");
                       inquirer
                         .prompt({
                           name: "continueOrNo",
@@ -126,6 +125,25 @@ function chooseToBuy(response) {
                 chooseToBuy(response);
               }
             });
+        }
+        if (answer.itemChoice == NaN) {
+          match = false;
+          console.log("Sorry, please select again.");
+          // inquirer
+          //   .prompt({
+          //     name: "wrongKey",
+          //     type: "confirm",
+          //     message: "Do you want to start again?",
+          //     default: true
+          //   })
+          //   .then(function(answerWK) {
+          //     if (answerWK == true) {
+          //       listProducts();
+          //     } else {
+          //       console.log("Come again!");
+          //       process.exit(0);
+          //     }
+          //   });
         }
       }
     });
